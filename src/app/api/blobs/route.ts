@@ -1,5 +1,6 @@
 import { list } from '@vercel/blob';
 import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth';
 
 export interface ListBlobResultBlobCustom {
     url: string;
@@ -55,6 +56,12 @@ async function getTranscription(pathname: string): Promise<string | undefined> {
 }
 
 export async function GET(): Promise<NextResponse> {
+    // Check authentication
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) {
+        return authResult;
+    }
+
     try {
         const { blobs }: ListBlobResultCustom = await list({
             token: process.env.BLOB_READ_WRITE_TOKEN,

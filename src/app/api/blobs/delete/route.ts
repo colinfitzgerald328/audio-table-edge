@@ -1,7 +1,14 @@
 import { del } from '@vercel/blob';
 import { NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/auth';
 
 export async function POST(request: Request): Promise<NextResponse> {
+    // Check authentication
+    const authResult = await requireAuth();
+    if (authResult instanceof NextResponse) {
+        return authResult;
+    }
+
     try {
         const { url } = await request.json();
         

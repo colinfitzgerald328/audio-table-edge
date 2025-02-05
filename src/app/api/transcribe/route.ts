@@ -6,6 +6,7 @@ import os from 'os';
 import path from 'path';
 import { pipeline } from 'node:stream/promises';
 import { Readable } from 'node:stream';
+import { requireAuth } from '@/lib/auth';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -51,6 +52,12 @@ async function transcribeAudio(filePath: string): Promise<string> {
 }
 
 export async function POST(request: Request) {
+  // Check authentication
+  const authResult = await requireAuth();
+  if (authResult instanceof NextResponse) {
+    return authResult;
+  }
+  
   let tempFilePath: string | undefined;
   
   try {
@@ -105,6 +112,12 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  // Check authentication
+  const authResult = await requireAuth();
+  if (authResult instanceof NextResponse) {
+    return authResult;
+  }
+  
   try {
     const { pathname } = await request.json();
     

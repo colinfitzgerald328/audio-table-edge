@@ -13,6 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import LoginBtn from "@/components/login-btn"
 import { ListBlobResultCustom, ListBlobResultBlobCustom } from "./api/blobs/route"
 import { upload } from '@vercel/blob/client'
 import { Button } from "@/components/ui/button"
@@ -42,6 +43,7 @@ import { Upload } from "lucide-react"
 import { DataTableColumnHeader } from "@/components/data-table-column-header"
 import { DataTableToolbar } from "@/components/data-table-toolbar"
 import { toast } from "sonner"
+import { AuthGate } from "@/components/auth-gate"
 
 // Helper functions
 const formatBytes = (bytes: number) => {
@@ -68,10 +70,18 @@ export type ListBlobResultBlob = {
 
 export default function Page() {
   return (
-    <div className="p-8">
-      <React.Suspense fallback={<TableLoading />}>
-        <DataTable />
-      </React.Suspense>
+    <div className="container mx-auto py-4">
+      <header className="flex items-center justify-between mb-8 border-b pb-4">
+        <h1 className="text-2xl font-bold">Audio Table Edge</h1>
+        <LoginBtn />
+      </header>
+      <AuthGate>
+        <div className="space-y-4">
+          <React.Suspense fallback={<TableLoading />}>
+            <DataTable />
+          </React.Suspense>
+        </div>
+      </AuthGate>
     </div>
   )
 }
