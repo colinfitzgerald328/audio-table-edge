@@ -8,6 +8,10 @@ import { pipeline } from 'node:stream/promises';
 import { Readable } from 'node:stream';
 import { requireAuth } from '@/lib/auth';
 
+export const config = {
+  maxDuration: 60,
+};
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
